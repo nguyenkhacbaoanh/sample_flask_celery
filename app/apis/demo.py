@@ -39,8 +39,11 @@ class Add(Resource):
 class Mul(Resource):
     @api.marshal_with(res)
     def post(self):
-        from app.tasks.mul import mul
         data = json.loads(request.data)
+        if data["queue"] == "w1":
+            from app.tasks.one.mul_1 import mul
+        elif data["queue"] == "w2":
+            from app.tasks.two.mul_2 import mul
         res = {
             "uuid":mul.delay(data["num1"],data["num2"])
         }
